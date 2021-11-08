@@ -20,7 +20,7 @@ stage('Email notification') {
     echo "${BUILD_NUMBER}"''', subject: '', to: 'akshay.pandey@mygurukulam.org'
 }
 stage('Slack notification') {
-    slackSend channel: 'akshay-personal', teamDomain: 'opstree', tokenCredentialId: 'dfdc8552-9367-48e2-a4fd-14752c88b45d'
+slackSend channel: 'akshay-personal', message: 'started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}', teamDomain: 'opstree', tokenCredentialId: 'dfdc8552-9367-48e2-a4fd-14752c88b45d'
 }
 stage('artifacts') {
 sh 'mvn package'
