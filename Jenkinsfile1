@@ -1,0 +1,29 @@
+node{
+    stage('checkout') {
+        git 'https://github.com/akshay02101995/spring3hibernate.git'
+    }
+stage('codeStability') {
+    sh 'mvn clean compile'
+}
+stage('parallelStage') {
+      parallel codeQuality: {
+            sh 'mvn checkstyle:checkstyle'
+    }, codeCoverage: {
+            sh 'mvn cobertura:cobertura'
+    }
+}
+stage('report') {
+cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
+}
+stage('Email notification') {
+    emailext body: '''Hi 
+    echo "${BUILD_NUMBER}"''', subject: '', to: 'akshay.pandey@mygurukulam.org'
+}
+stage('Slack notification') {
+    slackSend channel: 'akshay-personal', teamDomain: 'opstree', tokenCredentialId: 'dfdc8552-9367-48e2-a4fd-14752c88b45d'
+}
+stage('artifacts') {
+sh 'mvn package'
+nexusArtifactUploader artifacts: [[artifactId: 'Spring3HibernateApp', classifier: '', file: 'target/*.war', type: 'war']], credentialsId: '', groupId: 'Spring3HibernateApp', nexusUrl: '172.17.0.2:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'my-app', version: '4.0.0'
+ }
+}
