@@ -22,7 +22,8 @@ stage('Slack notification') {
 slackSend channel: 'akshay-personal', message: "started ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}", teamDomain: 'opstree', tokenCredentialId: 'dfdc8552-9367-48e2-a4fd-14752c88b45d'
 }
 stage('artifacts') {
-sh 'mvn deploy'
+sh 'mvn install'
+sh 'mvn org.apache.maven.plugins:maven-deploy-plugin@deploy-jar-file'
 nexusArtifactUploader artifacts: [[artifactId: 'Spring3HibernateApp', classifier: '', file: '/var/lib/jenkins/workspace/Pipeline_Project/target/Spring3HibernateApp.war', type: 'war']], credentialsId: '', groupId: 'Spring3HibernateApp', nexusUrl: '172.17.0.2:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'my-app', version: '1.8-SNAPSHOT'
  }
 }
