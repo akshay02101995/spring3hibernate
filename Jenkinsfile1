@@ -15,6 +15,10 @@ stage('parallelStage') {
 stage('report') {
 cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
 }
+stage('checkstyle report') {
+recordIssues(tools: [checkStyle(pattern: '**/checkstyle-result.xml')])
+}
+
 stage('Email notification') {
     emailext body: ''' ${JOB_NAME} ${BUILD_NUMBER} ''', subject: 'Email notification', to: 'akshay.pandey@mygurukulam.org'
 }
