@@ -23,6 +23,6 @@ slackSend channel: 'akshay-personal', message: "started ${JOB_NAME} ${BUILD_NUMB
 }
 stage('artifacts') {
 sh 'mvn install'
-nexusArtifactUploader artifacts: [[artifactId: 'Spring3HibernateApp', classifier: '', file: '**/*.war', type: 'war']], credentialsId: '', groupId: 'Spring3HibernateApp', nexusUrl: '172.17.0.2:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'my-app', version: '1.8-SNAPSHOT'
+nexusArtifactUploader artifacts: [[artifactId: 'Spring3HibernateApp', classifier: '', file: '/var/lib/jenkins/workspace/Pipeline_Project/target/*.war', type: 'war']], credentialsId: '', groupId: 'Spring3HibernateApp', nexusUrl: '172.17.0.2:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'my-app', version: '1.8-SNAPSHOT'
  }
 }
